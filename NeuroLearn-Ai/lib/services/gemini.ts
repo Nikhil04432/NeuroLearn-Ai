@@ -10,7 +10,7 @@ export class GeminiService {
   async generateVideoSummary(title: string, description: string): Promise<string> {
     try {
       // Use a safe fallback model name (update as needed per Google API docs)
-      const modelName = 'models/gemini-2.0-flash';
+      const modelName = 'models/gemini-2.5-flash';
       const model = this.genAI.getGenerativeModel({ model: modelName });
 
       const prompt = `
@@ -45,7 +45,7 @@ export class GeminiService {
   async generateQuiz(title: string, description: string): Promise<any[]> {
     try {
       // Use a safe fallback model name (update as needed per Google API docs)
-      const modelName = 'models/gemini-2.0-flash';
+      const modelName = 'models/gemini-2.5-flash';
       const model = this.genAI.getGenerativeModel({ model: modelName });
 
       const prompt = `
@@ -106,7 +106,7 @@ export class GeminiService {
   }
   async enhanceJobKeywords(jobTitle: string, jobDescription: string) {
     try {
-      const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+      const model = this.genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
       const prompt = `
       You are an AI career and learning assistant. Your task is to analyze a job description and provide a structured learning plan.
 
@@ -144,7 +144,7 @@ export class GeminiService {
 
   async categorizeDifficulty(title: string, description: string): Promise<string> {
     try {
-      const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+      const model = this.genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
       const prompt = `
         Categorize the difficulty level of this educational content:
