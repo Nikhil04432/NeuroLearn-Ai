@@ -173,6 +173,79 @@ export class GeminiService {
       return 'beginner';
     }
   }
+
+  /**
+   * Extract skills from job description and categorize by difficulty level
+   * Returns: { jobTitle, beginner: [], intermediate: [], advanced: [] }
+   */
+  async extractAndCategorizeSkills(
+    jobTitle: string,
+    jobDescription: string
+  ): Promise<{
+    jobTitle: string;
+    beginner: string[];
+    intermediate: string[];
+    advanced: string[];
+  }> {
+    try {
+      const model = this.genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+
+      const prompt = `
+Analyze this job description and extract skills categorized by difficulty level.
+
+Job Title: ${jobTitle}
+Job Description:
+${jobDescription}
+
+Return ONLY valid JSON (no markdown, no extra text) with this exact structure:
+{
+  "jobTitle": "${jobTitle}",
+  "beginner": ["Skill1", "Skill2", "Skill3"],
+  "intermediate": ["Skill1", "Skill2", "Skill3"],
+  "advanced": ["Skill1", "Skill2", "Skill3"]
+}
+
+Guidelines:
+- Beginner skills: Fundamental concepts (HTML, CSS, Basic JavaScript, Git, etc.)
+- Intermediate skills: Core job requirements (React, Node.js, SQL, REST APIs, etc.)
+- Advanced skills: Specialized/advanced concepts (System Design, Microservices, Cloud Architecture, etc.)
+
+Return ONLY valid JSON, nothing else.
+`;
+
+      const result = await model.generateContent(prompt);
+      let jsonString = result.response.text().trim();
+
+      // Remove markdown code blocks if present
+      jsonString = jsonString.replace(/```json|```/g, '').trim();
+
+      console.log('[Gemini] Cleaned skill categorization response:', jsonString);
+
+      const categorizedSkills = JSON.parse(jsonString);
+
+      // Ensure all fields exist
+      return {
+        jobTitle: categorizedSkills.jobTitle || jobTitle,
+        beginner: Array.isArray(categorizedSkills.beginner)
+          ? categorizedSkills.beginner
+          : [],
+        intermediate: Array.isArray(categorizedSkills.intermediate)
+          ? categorizedSkills.intermediate
+          : [],
+        advanced: Array.isArray(categorizedSkills.advanced)
+          ? categorizedSkills.advanced
+          : []
+      };
+    } catch (error) {
+      console.error('[Gemini] Error categorizing skills:', error);
+      return {
+        jobTitle,
+        beginner: [],
+        intermediate: [],
+        advanced: []
+      };
+    }
+  }
 }
 
 

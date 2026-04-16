@@ -96,33 +96,78 @@
       color: #4ade80;   /* Green color for success */
     }
 
-    /* ───────── Keywords Container ───────── */
-    /* Holds the skill keyword buttons */
-    #keywordsContainer {
+    /* ───────── Skills Container ───────── */
+    /* Holds the skill sections organized by difficulty */
+    #skillsContainer {
       display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
+      flex-direction: column;
+      gap: 12px;
     }
 
-    /* Each clickable keyword button */
-    .keyword-button {
-      padding: 5px 12px;
+    /* Difficulty Section */
+    .difficulty-section {
+      margin-bottom: 0;
+    }
+
+    .difficulty-header {
+      font-size: 11px;
+      font-weight: 600;
+      color: #cbd5e1;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #334155;
+    }
+
+    .difficulty-badge {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 9px;
+      font-weight: 700;
+      margin-right: 6px;
+      text-transform: uppercase;
+    }
+
+    .difficulty-badge.beginner {
+      background: rgba(52, 211, 153, 0.2);
+      color: #86efac;
+    }
+
+    .difficulty-badge.intermediate {
+      background: rgba(59, 130, 246, 0.2);
+      color: #93c5fd;
+    }
+
+    .difficulty-badge.advanced {
+      background: rgba(249, 115, 22, 0.2);
+      color: #fdba74;
+    }
+
+    .skills-list {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding-left: 4px;
+    }
+
+    /* Each clickable skill button */
+    .skill-button {
+      padding: 6px 10px;
       background: #1e293b;
       border: 1px solid #334155;
-      border-radius: 6px;
+      border-radius: 5px;
       cursor: pointer;
-      font-size: 12px;
-      color: #cbd5e1;
       transition: all 0.2s ease;
-      white-space: nowrap;
+      font-size: 11px;
+      color: #cbd5e1;
+      text-align: left;
     }
 
-    .keyword-button:hover {
-      background: #6366f1;       /* Indigo on hover */
+    .skill-button:hover {
+      background: #2d3748;
       border-color: #6366f1;
-      color: #fff;
-      transform: translateY(-1px);
-      box-shadow: 0 3px 10px rgba(99, 102, 241, 0.3);
+      color: #f1f5f9;
+      transform: translateX(2px);
     }
 
     /* ───────── Loading Spinner ───────── */
@@ -168,11 +213,11 @@
   <!-- STATUS TEXT: Updated dynamically by popup.js -->
   <div id="status">Reading job description...</div>
 
-  <!-- KEYWORDS CONTAINER:
+  <!-- SKILLS CONTAINER:
        - Shows loading spinner initially
-       - Replaced with keyword buttons after AI processes the job
+       - Replaced with skills organized by difficulty after AI processes the job
   -->
-  <div id="keywordsContainer">
+  <div id="skillsContainer">
     <div class="loading-animation"></div>
   </div>
 

@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { signOut } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { SearchBar } from '@/components/search-bar';
 import { PlaylistGrid } from '@/components/playlist-grid';
@@ -17,6 +17,8 @@ export default function HomePage() {
   const [error, setError] = useState('');
   const router = useRouter();
   const { data: session, status } = useSession();
+  const searchParams = useSearchParams();
+  const urlQuery = searchParams.get('q');
 
   const handleSearch = async (query: string, language: string, difficulty: string) => {
     setIsLoading(true);
@@ -74,6 +76,14 @@ export default function HomePage() {
       setIsLoading(false);
     }
   };
+
+  // Auto-search when coming from extension with ?q=skillname
+  useEffect(() => {
+    if (urlQuery && urlQuery.trim()) {
+      console.log('[HomePage] Auto-searching for:', urlQuery);
+      handleSearch(urlQuery.trim(), 'en', 'beginner');
+    }
+  }, [urlQuery]);
 
   const handleVideoPlay = (videoId: string) => {
     // Save playlist to localStorage before navigating

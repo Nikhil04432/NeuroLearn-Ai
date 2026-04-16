@@ -67,26 +67,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // ─── Call Gemini AI to extract keywords ───
+    // ─── Call Gemini AI to extract and categorize skills ───
     console.log('[curate-keywords API] 🤖 Calling Gemini AI...');
     const geminiService = new GeminiService();
-    const enhancedData = await geminiService.enhanceJobKeywords(jobTitle, jobDescription);
+    const skillsData = await geminiService.extractAndCategorizeSkills(jobTitle, jobDescription);
 
     // ─── LOG: Gemini AI response ───
     console.log('[curate-keywords API] ✅ Gemini AI responded!');
-    console.log('[curate-keywords API] 🎯 EXTRACTED KEYWORDS:');
-    console.log('[curate-keywords API]   Title:', enhancedData.title);
-    console.log('[curate-keywords API]   Summary:', enhancedData.summary);
-    console.log('[curate-keywords API]   Keywords (' + enhancedData.keywords?.length + '):');
-    enhancedData.keywords?.forEach((kw: string, i: number) => {
-      console.log(`[curate-keywords API]     ${i + 1}. ${kw}`);
-    });
+    console.log('[curate-keywords API] 🎯 SKILLS BY DIFFICULTY:');
+    console.log('[curate-keywords API]   Job Title:', skillsData.jobTitle);
+    console.log('[curate-keywords API]   Beginner (' + skillsData.beginner?.length + '):', skillsData.beginner);
+    console.log('[curate-keywords API]   Intermediate (' + skillsData.intermediate?.length + '):', skillsData.intermediate);
+    console.log('[curate-keywords API]   Advanced (' + skillsData.advanced?.length + '):', skillsData.advanced);
     console.log('[curate-keywords API] ═══════════════════════════════════\n');
 
     return NextResponse.json({
-      title: enhancedData.title,
-      summary: enhancedData.summary,
-      keywords: enhancedData.keywords
+      jobTitle: skillsData.jobTitle,
+      beginner: skillsData.beginner,
+      intermediate: skillsData.intermediate,
+      advanced: skillsData.advanced
     });
 
   } catch (error) {
